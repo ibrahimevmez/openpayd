@@ -16,17 +16,9 @@ import java.util.Random;
 import java.util.function.Function;
 
 public class ReusableMethods {
-    /*HOW DO YOU GET SCREENSHOT?
-     * I use getScreenShotAs method to take a screenshot in selenium in my framework
-     * I actually store the screenshot with unique name in my framework*/
+
     public static String getScreenshot(String name) throws IOException {
-//        THIS METHOD TAKES SCREENSHOT AND STORE IN /test-output FOLDER
-//        NAME OF THE SCREEN IS BASED ON THE CURRENT TIME
-//        SO THAN WE CAN HAVE UNIQUE NAME
-        // naming the screenshot with the current date to avoid duplication
         String date = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
-//        public static final String path = date.toString();
-        // TakesScreenshot is an interface of selenium that takes the screenshot. SAME IS IN THE HOOKS
         TakesScreenshot ts = (TakesScreenshot) Driver.getDriver();
         File source = ts.getScreenshotAs(OutputType.FILE);
         // full path to the screenshot location
@@ -37,7 +29,7 @@ public class ReusableMethods {
         return target;
     }
 
-    //========Switching Window=====//
+
     public static void switchToWindow(String targetTitle) {
         String origin = Driver.getDriver().getWindowHandle();
         for (String handle : Driver.getDriver().getWindowHandles()) {
@@ -48,37 +40,13 @@ public class ReusableMethods {
         }
         Driver.getDriver().switchTo().window(origin);
     }
-    //========Hover Over=====//
     public static void hover(WebElement element) {
         Actions actions = new Actions(Driver.getDriver());
         actions.moveToElement(element).perform();
     }
 
-    //==========Return a list of string given a list of Web Element====////
-    public static List<String> getElementsText(List<WebElement> list) {
-        List<String> elemTexts = new ArrayList<>();
-        for (WebElement el : list) {
-            if (!el.getText().isEmpty()) {
-                elemTexts.add(el.getText());
-            }
-        }
-        return elemTexts;
-    }
 
-    //========Returns the Text of the element given an element locator==//
-    public static List<String> getElementsText(By locator) {
-        List<WebElement> elems = Driver.getDriver().findElements(locator);
-        List<String> elemTexts = new ArrayList<>();
-        for (WebElement el : elems) {
-            if (!el.getText().isEmpty()) {
-                elemTexts.add(el.getText());
-            }
-        }
-        return elemTexts;
-    }
 
-    //   HARD WAIT WITH THREAD.SLEEP
-//   waitFor(5);  => waits for 5 second
     public static void waitFor(int sec) {
         try {
             Thread.sleep(sec * 1000);
@@ -86,7 +54,7 @@ public class ReusableMethods {
             e.printStackTrace();
         }
     }
-    //===============Explicit Wait==============//
+
     public static WebElement waitForVisibility(WebElement element, int timeout) {
         WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(timeout));
         return wait.until(ExpectedConditions.visibilityOf(element));
@@ -134,7 +102,6 @@ public class ReusableMethods {
         }
     }
 
-    //======Fluent Wait====//
     public static WebElement fluentWait(final WebElement webElement, int timeout) {
         //FluentWait<WebDriver> wait = new FluentWait<WebDriver>(Driver.getDriver()).withTimeout(timeinsec, TimeUnit.SECONDS).pollingEvery(timeinsec, TimeUnit.SECONDS);
         FluentWait<WebDriver> wait = new FluentWait<WebDriver>(Driver.getDriver())
@@ -149,42 +116,7 @@ public class ReusableMethods {
 
         return element;
     }
-    /**
-     * Performs double click action on an element
-     * @param element
-     */
-    public static void doubleClick(WebElement element) {
-        new Actions(Driver.getDriver()).doubleClick(element).build().perform();
-    }
 
-    /**
-     * @param element
-     * @param check
-     */
-    public static void selectCheckBox(WebElement element, boolean check) {
-        if (check) {
-            if (!element.isSelected()) {
-                element.click();
-            }
-        } else {
-            if (element.isSelected()) {
-                element.click();
-            }
-        }
-    }
-
-    /**
-     * Selects a random value from a dropdown list and returns the selected Web Element
-     * @param select
-     * @return
-     */
-    public static WebElement selectRandomTextFromDropdown(Select select) {
-        Random random = new Random();
-        List<WebElement> weblist = select.getOptions();
-        int optionIndex = 1 + random.nextInt(weblist.size() - 1);
-        select.selectByIndex(optionIndex);
-        return select.getFirstSelectedOption();
-    }
     public static void clickWithJS(WebElement element) {
         ((JavascriptExecutor) Driver.getDriver()).executeScript("arguments[0].scrollIntoView(true);", element);
         ((JavascriptExecutor) Driver.getDriver()).executeScript("arguments[0].click();", element);

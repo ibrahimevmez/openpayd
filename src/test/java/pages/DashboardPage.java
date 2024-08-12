@@ -11,7 +11,7 @@ public class DashboardPage {
     }
 
     @FindBy(xpath = "//input[@name='q']")
-    public WebElement searchbox;
+    public WebElement aramaKutusu;
 
     @FindBy(xpath = "(//a[@title='Ürün'])[1]")
     public WebElement urun;

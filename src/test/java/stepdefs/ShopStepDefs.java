@@ -28,17 +28,19 @@ public class ShopStepDefs {
     }
     @When("Kullanici arama kutusuna urun yazar ve arama yapar")
     public void kullanici_arama_kutusuna_urun_yazar() {
-        ReusableMethods.clickWithJS(dashboardPage.searchbox);
+        ReusableMethods.clickWithJS(dashboardPage.aramaKutusu);
         ReusableMethods.waitFor(1);
-        dashboardPage.searchbox.sendKeys("ürün", Keys.ARROW_DOWN, Keys.ENTER);
+        dashboardPage.aramaKutusu.sendKeys("ürün");
         ReusableMethods.waitFor(1);
-        robot.mouseWheel(4);
+        ReusableMethods.hover(dashboardPage.urun);
         ReusableMethods.waitFor(1);
-        ReusableMethods.clickWithJS(dashboardPage.urun);
+        dashboardPage.urun.sendKeys(Keys.ENTER);
+                ;
 
     }
     @Then("Kullanici bes urun ekler")
     public void kullanici_bes_urun_ekler() {
+        ReusableMethods.waitFor(1);
         ReusableMethods.clickWithJS(dashboardPage.dropdown);
         Select select = new Select(dashboardPage.dropdown);
         select.selectByIndex(4);
