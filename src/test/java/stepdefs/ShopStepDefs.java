@@ -1,11 +1,15 @@
 package stepdefs;
 
+import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import pages.DashboardPage;
 import utilities.ConfigReader;
@@ -21,46 +25,75 @@ public class ShopStepDefs {
     public ShopStepDefs() throws AWTException {
     }
 
-    @Given("Kullanici URL e gider")
-    public void kullanici_url_e_gider() {
+    @Given("User goes to the URL.")
+    public void user_goes_to_the_URL() {
         Driver.getDriver().get(ConfigReader.getProperty("URL"));
         ReusableMethods.waitFor(2);
+        Assert.assertTrue(Driver.getDriver().getTitle().contains("Amazon"));
+        ReusableMethods.clickWithJS(dashboardPage.accept);
+        ReusableMethods.waitFor(2);
     }
-    @When("Kullanici arama kutusuna urun yazar ve arama yapar")
-    public void kullanici_arama_kutusuna_urun_yazar() {
-        ReusableMethods.clickWithJS(dashboardPage.aramaKutusu);
+
+    @When("User types Laptops in the searchbox and search it.")
+    public void user_types_Laptops_in_the_searchbox_and_search_it() {
+
+        ReusableMethods.clickWithJS(dashboardPage.searchbox);
         ReusableMethods.waitFor(1);
-        dashboardPage.aramaKutusu.sendKeys("ürün");
+        dashboardPage.searchbox.sendKeys("Laptops" + Keys.ENTER);
         ReusableMethods.waitFor(1);
-        ReusableMethods.hover(dashboardPage.urun);
-        ReusableMethods.waitFor(1);
-        dashboardPage.urun.sendKeys(Keys.ENTER);
-                ;
 
     }
-    @Then("Kullanici bes urun ekler")
-    public void kullanici_bes_urun_ekler() {
+
+    @Then("User adds the non-discounted products in stock on the first page of the search results to the cart.")
+    public void user_adds_the_non_discounted_products_in_stock_on_the_first_page_of_the_search_results_to_the_cart() {
         ReusableMethods.waitFor(1);
-        ReusableMethods.clickWithJS(dashboardPage.dropdown);
-        Select select = new Select(dashboardPage.dropdown);
-        select.selectByIndex(4);
-        ReusableMethods.waitFor(1);
-        ReusableMethods.clickWithJS(dashboardPage.sepeteEkle);
+        robot.mouseWheel(3);
+        List<WebElement> laptops = dashboardPage.laptopTotal;
+        for (WebElement laptop : laptops) {
+            try {
+                WebElement discountLabel = laptop.findElement(By.xpath("//span[@class='a-price-symbol'])"));
+                if (discountLabel.isDisplayed()) {
+                    continue;
+                }
+            } catch (NoSuchElementException e) {
+
+            }
+
+            try {
+                WebElement stockStatus = laptop.findElement(By.xpath("//div[@id='availability']//span[contains(text(), 'In Stock')]"));
+                if (stockStatus.getText().contains("In Stock")) {
+                    WebElement addToCartButton = laptop.findElement(By.xpath("//span[contains(text(),'Add to Cart')]"));
+                    addToCartButton.click();
+                    ReusableMethods.waitForVisibility(By.id("nav-cart"), 2);
+                    System.out.println("Laptop added to the cart.");
+                }
+            } catch (NoSuchElementException e) {
+
+            }
+        }
+
     }
-    @Then("Kullanici sepetinize eklenmistir yazisini gorur")
-    public void kullanici_sepetinize_eklenmistir_yazisini_gorur() {
+
+    @Then("User goes to cart and check if the products are the right.")
+    public void user_goes_to_cart_and_check_if_the_products_are_the_right() {
         ReusableMethods.waitFor(1);
-    Assert.assertTrue(dashboardPage.sepeteEklenmistir.isDisplayed());
+        ReusableMethods.clickWithJS(dashboardPage.cart);
+
+        ReusableMethods.waitForVisibility(By.id("sc-active-cart"), 2);
+        List<WebElement> laptopsInCart = Driver.getDriver().findElements((By.cssSelector(".sc-list-item-content")));
+
+        if (laptopsInCart.size() > 0) {
+            System.out.println("Laptops successfully added to the cart.");
+        } else {
+            System.out.println("No laptops found in the cart.");
+        }
     }
-    @Then("Kullanici sepette bes urun oldugunu kontrol eder")
-    public void kullanici_sepette_bes_urun_oldugunu_kontrol_eder() {
-        ReusableMethods.waitFor(1);
-        Assert.assertTrue(dashboardPage.urunSayisi.getText().contains("5"));
-    }
-    @Then("Uygulamayi kapat")
-    public void uygulamayi_kapat() {
+
+    @Then("Close the application.")
+    public void close_the_application() {
         ReusableMethods.waitFor(1);
         Driver.getDriver().close();
     }
 
 }
+

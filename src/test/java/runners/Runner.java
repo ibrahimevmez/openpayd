@@ -17,7 +17,7 @@ import org.junit.runner.RunWith;
         monochrome = true,
         features = "./src/test/resources/features",
         glue = {"stepdefs"},
-        tags = "@shop",
+        tags = "@laptop",
         dryRun = false
 )
 public class Runner {

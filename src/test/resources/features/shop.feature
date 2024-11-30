@@ -1,14 +1,12 @@
-@shop
-Feature: SatinAlma
+@laptop
+Feature:Shopping Laptops
 
-  Background: Url and close
-    Given Kullanici URL e gider
-  Scenario: Satin Alma
-    When Kullanici arama kutusuna urun yazar ve arama yapar
-    Then Kullanici bes urun ekler
-    Then Kullanici sepetinize eklenmistir yazisini gorur
-    Then Kullanici sepette bes urun oldugunu kontrol eder
-    And Uygulamayi kapat
+  Scenario: Shopping
+    Given User goes to the URL.
+    When User types Laptops in the searchbox and search it.
+    Then User adds the non-discounted products in stock on the first page of the search results to the cart.
+    Then User goes to cart and check if the products are the right.
+    And Close the application.
 
 
 

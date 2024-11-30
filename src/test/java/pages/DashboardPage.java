@@ -10,22 +10,24 @@ public class DashboardPage {
         PageFactory.initElements(Driver.getDriver(),this);
     }
 
-    @FindBy(xpath = "//input[@name='q']")
-    public WebElement aramaKutusu;
+    @FindBy(xpath = "//input[@id='sp-cc-accept']")
+    public WebElement accept;
 
-    @FindBy(xpath = "(//a[@title='Ürün'])[1]")
-    public WebElement urun;
+    @FindBy(xpath = "//input[@id='twotabsearchtextbox']")
+    public WebElement searchbox;
 
-    @FindBy(xpath = "//select[@id='qty-input']")
-    public WebElement dropdown;
+    @FindBy(xpath = "//div[@class='s-main-slot s-result-list s-search-results sg-row']")
+    public WebElement laptopTotal;
 
-    @FindBy(xpath = "//a[@class='add-to-cart-button']")
-    public WebElement sepeteEkle;
+    @FindBy(xpath = "//span[@class='a-price-symbol']")
+    public WebElement discountLabel;
 
-    @FindBy(xpath = "//div[@class='shopping-information-cart-inside']")
-    public WebElement sepeteEklenmistir;
+    @FindBy(xpath = "//div[@id='availability']//span[contains(text(), 'In Stock')]")
+    public WebElement inStock;
 
-    @FindBy (xpath = "(//input[@class='form-control'])[2]")
-    public WebElement urunSayisi;
+    @FindBy(id = "nav-cart")
+    public WebElement cart;
+
+
 
 }
