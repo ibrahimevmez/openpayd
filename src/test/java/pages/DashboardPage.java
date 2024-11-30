@@ -16,6 +16,7 @@ public class DashboardPage {
     @FindBy(xpath = "//input[@id='twotabsearchtextbox']")
     public WebElement searchbox;
 
+
     @FindBy(xpath = "//div[@class='s-main-slot s-result-list s-search-results sg-row']")
     public WebElement laptopTotal;
 
