@@ -26,6 +26,7 @@ public class DashboardPage {
     @FindBy(xpath = "//div[@id='availability']//span[contains(text(), 'In Stock')]")
     public WebElement inStock;
 
+
     @FindBy(id = "nav-cart")
     public WebElement cart;
 
